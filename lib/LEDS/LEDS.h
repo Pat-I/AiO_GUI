@@ -120,6 +120,8 @@ public:
   void init() {
     pinMode(GGA_LED, OUTPUT);
 
+    ledDriver.begin();
+
     Serial.print("\r\nInitializing RGB LED Outputs");
     Wire.beginTransmission(0x70);
     Serial.print("\r\n- RGB PCA9685 ");
@@ -128,7 +130,6 @@ public:
     else
       Serial.print("*NOT found!*");
 
-    ledDriver.begin();
     Wire.setClock(1000000);
     ledDriver.setPWMFreq(120); // 120 hz should be enough to not notice, but increase if flickering
     ledDriver.setOutputMode(false); // false: open drain, true: totempole (push/pull)

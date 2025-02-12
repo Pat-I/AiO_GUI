@@ -169,7 +169,7 @@ public:
     else if (watchdogTimer > watchdogAlertPeriod)
     {
       if (debugLevel > 0 && !watchdogAlertTriggered) {
-        Serial.print("\r\n** UDP Machine Comms lost for 2s **");
+        Serial.print("\r\n** UDP Machine Comms lost for 2s **\r\n");
         watchdogAlertTriggered = true;
       }
     }
@@ -180,6 +180,12 @@ public:
   void updateMachineStates()
   {
     //Serial.print("\r\nUpdating Machine States");
+    if (debugLevel > 0 && watchdogTimer > watchdogAlertPeriod) {
+      Serial.print("\r\n*** UDP Machine Comms resumed ***");
+    }
+    watchdogAlertTriggered = false;
+    watchdogTimer = 0;   //reset watchdog timer
+
     static uint8_t lastTrigger;          // "static" means this var is accessible only to this function but its value persists (it's not destroyed)
     static uint8_t raiseTimer = 0;
     static uint8_t lowerTimer = 0;
@@ -249,14 +255,7 @@ public:
       triggerOutputUpdate = false;
     }
 
-    if (debugLevel > 0 && watchdogTimer > watchdogAlertPeriod) {
-      Serial.print("\r\n*** UDP Machine Comms resumed ***");
-    }
-    watchdogAlertTriggered = false;
-    watchdogTimer = 0;   //reset watchdog timer
-
     // *** Sending PGN_237 isn't necessary, doesn't do anything?
-
     // generic "from machine" PGN template
     //uint8_t PGN_237[14] = { 0x80, 0x81, 0x7B, 237, 8, 1, 2, 3, 4, 0, 0, 0, 0, 0xCC };
 

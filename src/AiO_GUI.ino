@@ -46,8 +46,8 @@ void setup()
   CAN_Setup();                    // Start CAN3 for Keya
 
   outputsInit();                  // Initialize PCA9685 for LOCK, AUX & Sections/Machine outputs, enable AUX output but leave others Hi-Z
-  machinePTR = new MACHINE;
-  machinePTR->init(500);    // 500 is starting address for machine EEPROM storage
+  machinePTR = new MACHINE;       // need to use pointer otherwise Mongoose has a seizure
+  machinePTR->init(500);          // 500 is starting address for machine EEPROM storage
   //machinePTR.setSectionOutputsHandler(updateSectionOutputs);
   machinePTR->setMachineOutputsHandler(updateMachineOutputs);
   machinePTR->setUdpReplyHandler(machinePgnReplies);
