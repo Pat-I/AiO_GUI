@@ -34,17 +34,18 @@ void outputsInit() {
   // only nSLEEP pin is controlled on Aux & Lock by PCA9685
 
   outputs.begin();              // Adafruit_PWMServoDriver 
-  Wire.setClock(1000000);
-  outputs.setPWMFreq(1526);     // the maximum, to hopefully mitigate switching/frequency noise
-  outputs.setOutputMode(true);  // false: open drain, true: totempole (push/pull)
-  
-  Wire.beginTransmission(0x44);
+
+  I2C_WIRE.beginTransmission(0x44);
   Serial.print("\r\n  - Sections/Lock/Aux PCA9685 ");
-  if (Wire.endTransmission() == 0)
+  if (I2C_WIRE.endTransmission() == 0)
     Serial.print("found");
   else
     Serial.print("*NOT found!*");
 
+  I2C_WIRE.setClock(1000000);
+  outputs.setPWMFreq(1526);     // the maximum, to hopefully mitigate switching/frequency noise
+  outputs.setOutputMode(true);  // false: open drain, true: totempole (push/pull)
+  
   // put all DRVs to sleep (Hi-Z outputs & they're ready to wake up)
   Serial.print("\r\n    - All LOCK/AUX/Section DRVs set to sleep (Hi-Z outputs)");
   for (uint8_t drvNum = 0; drvNum < drvCnt; drvNum++){
@@ -87,7 +88,7 @@ void initMachineOutputs() {
 // - sections 1-16, Hyd Up/Down, Tramline Right/Left, Geo Stop
 void updateMachineOutputs()
 {
-  Serial.print("\r\n\nMachine Outputs update");
+  Serial.print("\r\nMachine Outputs update");
   for (uint8_t i = 1; i <= numMachineOutputs; i++) {
     Serial.printf("\r\n- Pin %2i: %i ", machinePCA9685OutputPins[i-1], machinePTR->states.functions[machinePTR->config.pinFunction[i]]);
     Serial.print(machinePTR->functionNames[machinePTR->config.pinFunction[i]]);
@@ -97,4 +98,5 @@ void updateMachineOutputs()
       machinePTR->states.functions[machinePTR->config.pinFunction[i]] == machinePTR->config.isPinActiveHigh  // == does an XOR operation
     );
   }
+  Serial.println();
 }
