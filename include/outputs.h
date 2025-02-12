@@ -83,7 +83,7 @@ void initMachineOutputs() {
 }
 
 // callback function triggered by Machine class to update "machine" outputs
-// this updates the Machine Module Pin Configuration outputs
+// this updates the 6 outputs according to AOG's Machine Module Pin Configuration
 // - sections 1-16, Hyd Up/Down, Tramline Right/Left, Geo Stop
 void updateMachineOutputs()
 {
@@ -92,11 +92,9 @@ void updateMachineOutputs()
     Serial.printf("\r\n- Pin %2i: %i ", machinePCA9685OutputPins[i-1], machinePTR->states.functions[machinePTR->config.pinFunction[i]]);
     Serial.print(machinePTR->functionNames[machinePTR->config.pinFunction[i]]);
 
-    //digitalWrite(machinePCA9685OutputPins[i], machinePTR->state.functions[machinePTR->config.pinFunction[i]] == machinePTR->config.isPinActiveHigh);
-    outputs.setPin(machinePCA9685OutputPins[i-1], 0,
-      machinePTR->states.functions[machinePTR->config.pinFunction[i]] == machinePTR->config.isPinActiveHigh); // == does an XOR operation
-    
-    
-    //outputs.setPin(machinePCA9685OutputPins[0], 0, 1); // sets PCA9685 pin HIGH
+    outputs.setPin(
+      machinePCA9685OutputPins[i-1], 0,
+      machinePTR->states.functions[machinePTR->config.pinFunction[i]] == machinePTR->config.isPinActiveHigh  // == does an XOR operation
+    );
   }
 }
