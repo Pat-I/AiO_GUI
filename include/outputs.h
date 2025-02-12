@@ -36,7 +36,7 @@ void outputsInit() {
   outputs.begin();              // Adafruit_PWMServoDriver 
   Wire.setClock(1000000);
   outputs.setPWMFreq(1526);     // the maximum, to hopefully mitigate switching/frequency noise
-  outputs.setOutputMode(false); // false: open drain, true: totempole (push/pull)
+  outputs.setOutputMode(true);  // false: open drain, true: totempole (push/pull)
   
   Wire.beginTransmission(0x44);
   Serial.print("\r\n  - Sections/Lock/Aux PCA9685 ");
@@ -65,7 +65,7 @@ void outputsInit() {
 
 
 const uint8_t numMachineOutputs = 6;
-const uint8_t machinePCA9685OutputPins[numMachineOutputs] = { 0, 1, 4, 5, 10, 9 };
+const uint8_t machinePCA9685OutputPins[numMachineOutputs] = { 1, 0, 5, 4, 9, 10 };  // the pairs of pins need to be swapped from the schematic!?!
 //const uint8_t Machine_PCA9685_DRV_OFF_Pins[3] = { 2, 6, 8 };
 //const uint8_t Machine_PCA9685_DRV_Sleep_Pins[3] = { 13, 3, 7 };
 
@@ -94,7 +94,7 @@ void updateMachineOutputs()
 
     //digitalWrite(machinePCA9685OutputPins[i], machinePTR->state.functions[machinePTR->config.pinFunction[i]] == machinePTR->config.isPinActiveHigh);
     outputs.setPin(machinePCA9685OutputPins[i-1], 0,
-      machinePTR->states.functions[machinePTR->config.pinFunction[i]]);// == machinePTR->config.isPinActiveHigh); // == does an XOR operation
+      machinePTR->states.functions[machinePTR->config.pinFunction[i]] == machinePTR->config.isPinActiveHigh); // == does an XOR operation
     
     
     //outputs.setPin(machinePCA9685OutputPins[0], 0, 1); // sets PCA9685 pin HIGH
