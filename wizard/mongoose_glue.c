@@ -8,10 +8,8 @@
 #include "Arduino.h"
 #include "mongoose_glue.h"
 
-static struct settings s_settings = {"edit & save me", 1, 123.12345, false, 10, false, 1, 192, 168, 5, 126, "AiO GUI v5.12"};
-
 void glue_init(void) {
-  MG_DEBUG(("Custom init done"));
+  //MG_DEBUG(("Custom init done"));
 }
 
 // save
@@ -21,7 +19,7 @@ bool glue_check_save(void) {
 }
 void glue_start_save(void) {
   s_action_timeout_save = mg_now() + 1000; // Start save, finish after 1 second
-  MG_DEBUG(("s_setting: %s,%d,%d,%d,%d,%d,%d", s_settings.fversion, s_settings.bd_ip1, s_settings.bd_ip2, s_settings.bd_ip3, s_settings.bd_ip4 ,s_settings.gps_sync, s_settings.gps_pass));
+  MG_DEBUG(("s_setting: %s,%d,%d,%d,%d,%s,%d", s_settings.fversion, s_settings.bd_ip1, s_settings.bd_ip2, s_settings.bd_ip3, s_settings.bd_ip4 ,s_settings.gps_sync, s_settings.gps_pass));
   save_config();
 }
 
@@ -51,6 +49,7 @@ bool  glue_ota_write_firmware_update(void *context, void *buf, size_t len) {
   return mg_ota_write(buf, len);
 }
 
+static struct settings s_settings = {false, "60ms-F9P", 192, 168, 5, 126, "AiO v5.0d Web GUI - Feb 11 2025 13:47:11"};
 void glue_get_settings(struct settings *data) {
   *data = s_settings;  // Sync with your device
 }

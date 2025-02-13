@@ -177,12 +177,12 @@ void GGA_GNS_PostProcess() // called by either GGA or GNS handler
   gps1Stats.incHzCount();
   LEDs.setGpsLED(atoi(GGA.fixQuality), true);
   aogGpsToAutoSteerLoopTimer = 0;
-
   if (!ubxParser.useDual)
   { // if not using Dual
     if (BNO.isActive)
     {
-      bnoRing.peek(bnoRingData, gpsConfig.gpsSync); // 10=0ms ago, 9=10ms ago, 8=20ms ago, 7=30ms ago, 6=40ms ago, 5=50ms ago, 4=60ms ago, 3=70ms ago, 2=80ms ago, 1=90ms ago, 0=100ms ago
+      int syncTmp = atoi(gpsConfig.gpsSync) * 0.1;
+      bnoRing.peek(bnoRingData, syncLUT[syncTmp]); // 10=0ms ago, 9=10ms ago, 8=20ms ago, 7=30ms ago, 6=40ms ago, 5=50ms ago, 4=60ms ago, 3=70ms ago, 2=80ms ago, 1=90ms ago, 0=100ms ago
       itoa(bnoRingData.yawX10, IMU.heading, 10);    // format IMU data for Panda Sentence - Heading
 
       if (BNO.isSwapXY)
@@ -376,7 +376,8 @@ void HPR_Handler()
   if (fuseImu.fuseData.useFUSEImu)
   { // Three separate if/else cluases for clarity. Can be one.
     // Send data to FUSEImu
-    bnoRing.peek(bnoRingData, syncLUT[gpsConfig.gpsSync]); // 10=0ms ago, 9=10ms ago, 8=20ms ago, 7=30ms ago, 6=40ms ago, 5=50ms ago, 4=60ms ago, 3=70ms ago, 2=80ms ago, 1=90ms ago, 0=100ms ago
+    int syncTmp = atoi(gpsConfig.gpsSync) * 0.1;
+    bnoRing.peek(bnoRingData, syncLUT[syncTmp]); // 10=0ms ago, 9=10ms ago, 8=20ms ago, 7=30ms ago, 6=40ms ago, 5=50ms ago, 4=60ms ago, 3=70ms ago, 2=80ms ago, 1=90ms ago
     fuseImu.fuseData.rollDual = atof(HPR.roll);
     fuseImu.fuseData.heading = atof(HPR.heading);
     fuseImu.fuseData.correctionHeading = bnoRingData.yawX10;
