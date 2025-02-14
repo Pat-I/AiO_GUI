@@ -190,7 +190,7 @@ void serialESP32()
       }
       else
       {
-        Serial.print("\r\n\n*** ESP32 Serial CR/LF detected but NOT a valid PGN ([0]/[1] bytes != 128/129) ***\r\n");
+        Serial.print("\r\n\n*** ESP32 Serial CR/LF detected but NOT a valid PGN ([0]/[1] bytes != 128/129) ***");
         Serial.print("\r\n    >");
         for (uint8_t i = 0; i < incomingIndex - 2; i++) {
           Serial.printf("%3i ", incomingBytes[i]);
