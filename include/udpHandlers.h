@@ -90,7 +90,20 @@ void pgnHandler(struct mg_connection *udpPacket, int ev, void *ev_data, void *fn
     if (udpPacket->recv.buf[0] != 128 || udpPacket->recv.buf[1] != 129 || udpPacket->recv.buf[2] != 127)
       return;
 
+    ESP32usage.timeIn();
+    if (udpPacket->recv.buf[3] != 201) {    // do not forward Subnet Change PGN
+      SerialESP32.write(udpPacket->recv.buf, udpPacket->recv.len);
+      SerialESP32.println();   // to signal end of PGN
+      /*Serial.print("\r\nAgIO-e:8888->T41-s->E32 ");
+      for (uint8_t i = 0; i < len; i++) {
+        Serial.print(udpData[i]); Serial.print(" ");
+      }*/
+    }
+    ESP32usage.timeOut();
+
+
     #ifdef MACHINE_H
+      MACHusage.timeIn();
       // 0xE5 (229) - 64 Section Data
       // 0xEB (235) - Section Dimensions
       // 0xEC (236) - Machine Pin Config
@@ -100,6 +113,7 @@ void pgnHandler(struct mg_connection *udpPacket, int ev, void *ev_data, void *fn
       {
         return;   // abort further PGN processing if machine specific PGN as received/parsed
       }
+      MACHusage.timeOut();
     #endif
 
     PGNusage.timeIn();
