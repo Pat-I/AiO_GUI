@@ -170,7 +170,7 @@ uint16_t ggaMissed;
 
 struct GPSConfigStruct
 {
-  uint8_t gpsSync = 1;
+  char gpsSync[12];
   bool gpsPass = false; // False = GPS neeeds to send GGA, VTG & HPR messages. True = GPS needs to send KSXT messages only.
 };
 GPSConfigStruct gpsConfig;

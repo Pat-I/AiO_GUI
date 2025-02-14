@@ -156,7 +156,7 @@ public:
   {
     if (watchdogTimer > watchdogTimeoutPeriod)    // watchdogTimer reset with Machine Data PGN, should be 64 Section instead or both?
     {
-      if (debugLevel > 0) Serial.print((String)"\r\n*** UDP Machine Comms lost for " + watchdogTimeoutPeriod / 1000 + "s, setting all outputs OFF! ***");
+      if (debugLevel > 0) Serial.print((String)"\r\n*** UDP Machine Comms lost for " + watchdogTimeoutPeriod / 1000 + "s, setting all outputs OFF! - Normal if AOG is not running with a field open. ***");
       for (uint8_t i = 1; i <= 21; i++) {
         states.functions[i] = 0;            // set all functions OFF
       }
