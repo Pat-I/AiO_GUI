@@ -60,7 +60,7 @@ extern "C" void save_config()
 {
     Serial.println("Saving config ...");
     glue_get_settings(&aio_settings);
-    MG_DEBUG(("aio_settings: %s,%d,%d,%d,%d,%d,%d", aio_settings.fversion, aio_settings.bd_ip1, aio_settings.bd_ip2, aio_settings.bd_ip3, aio_settings.bd_ip4, aio_settings.gps_sync, aio_settings.gps_pass));
+    MG_DEBUG(("aio_settings: %s,%d,%d,%d,%d,%s,%d", aio_settings.fversion, aio_settings.bd_ip1, aio_settings.bd_ip2, aio_settings.bd_ip3, aio_settings.bd_ip4, aio_settings.gps_sync, aio_settings.gps_pass));
 
     netConfig.currentIP[0] = aio_settings.bd_ip1;
     netConfig.currentIP[1] = aio_settings.bd_ip2;
@@ -68,7 +68,7 @@ extern "C" void save_config()
     netConfig.currentIP[3] = aio_settings.bd_ip4;
     save_current_net();
 
-    gpsConfig.gpsSync = aio_settings.gps_sync;
+    strcpy(gpsConfig.gpsSync, aio_settings.gps_sync);
     gpsConfig.gpsPass = aio_settings.gps_pass;
     save_gps();
 }
@@ -84,12 +84,12 @@ extern "C" void load_config()
     aio_settings.bd_ip3 = netConfig.currentIP[2];
     aio_settings.bd_ip4 = netConfig.currentIP[3];
     load_gps();
-    aio_settings.gps_sync = gpsConfig.gpsSync;
+    strcpy(aio_settings.gps_sync, gpsConfig.gpsSync);
     aio_settings.gps_pass = gpsConfig.gpsPass;
 
     strcpy(aio_settings.fversion, inoVersion);
 
-    MG_DEBUG(("aio_settings: %s,%d,%d,%d,%d,%d,%d", aio_settings.fversion, aio_settings.bd_ip1, aio_settings.bd_ip2, aio_settings.bd_ip3, aio_settings.bd_ip4, aio_settings.gps_sync, aio_settings.gps_pass));
+    Serial.printf("aio_settings: %s,%d,%d,%d,%d,%s,%d\r\n", aio_settings.fversion, aio_settings.bd_ip1, aio_settings.bd_ip2, aio_settings.bd_ip3, aio_settings.bd_ip4, aio_settings.gps_sync, aio_settings.gps_pass);
     glue_set_settings(&aio_settings);
     glue_update_state();
 }
