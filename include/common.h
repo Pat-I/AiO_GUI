@@ -186,7 +186,7 @@ int msgBufLen = 0;
 
 // GUI variables
 settings aio_settings;
-#include "configfuncs.h"
+#include "configFuncs.h"
 
 // Autosteer encoder class instance read single or double input values in Autosteer.ino
 #include "Encoder.h"
